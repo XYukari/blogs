@@ -1,17 +1,6 @@
 # XCPC 代码模板库
 
-### 线性基
-
-```cpp
-uint64_t p[52]; //p[i]保存了第i位的线性基，贪心法得到的是行阶梯型
-void insert(uint64_t x) {
-    for (int i = 51; ~i; i--) {
-        if (!(x >> i)) continue;
-        if (!p[i]) { p[i] = x; break; }
-        x ^= p[i];
-    }
-} //用法：insert(a)
-```
+## 数据结构
 
 ### 并查集
 
@@ -555,11 +544,27 @@ void sink(int[] h, int i) {
 }
 ```
 
-### 线性筛欧拉函数
+## 数学
+
+### 线性基
+
+```cpp
+uint64_t p[52]; //p[i]保存了第i位的线性基，贪心法得到的是行阶梯型
+void insert(uint64_t x) {
+    for (int i = 51; ~i; i--) {
+        if (!(x >> i)) continue;
+        if (!p[i]) { p[i] = x; break; }
+        x ^= p[i];
+    }
+} //用法：insert(a)
+```
+
+
+### 线性筛质数/欧拉函数
 
 ```cpp
 for (int i = 2; i <= n; i++) {
-    if (!v[i]) prime[++cnt] = i, phi[i] = i - 1;
+    if (!v[i]) prime[++cnt] = i, phi[i] = i - 1; //v[i]==0, i是质数
     for (int j = 1; j <= cnt && i * prime[j] > n; j++) {
         v[i * prime[j]] = 1;
         if (i % prime[j] == 0) {
@@ -569,4 +574,19 @@ for (int i = 2; i <= n; i++) {
         phi[i * prime[j]] = phi[i] * phi[prime[j]];
     }
 }
+```
+
+## 杂项
+
+
+### 离散化
+
+```cpp
+for (int i = 1; i <= n; i++) 
+    lsh[i] = a[i] = read();
+sort(lsh + 1, lsh + n + 1);
+int m = unique(lsh + 1, lsh + n + 1) - lsh - 1;
+for (int i = 1; i <= n; i++) 
+    a[i] = lower_bound(lsh + 1, lsh + m + 1, a[i]) - lsh;
+
 ```
