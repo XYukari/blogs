@@ -538,4 +538,35 @@ add(1, id[x], id[x] + siz[x] - 1, k);
 query(1, id[x], id[x] + siz[x] - 1)；
 ```
 
+### 原地堆化
 
+```java
+void heapify(int[] h) { // 从下往上遍历非叶子节点
+    for (int i = h.length / 2 - 1; i >= 0; i--)  sink(h, i);
+}
+void sink(int[] h, int i) {
+    int n = h.length;
+    while (2 * i + 1 < n) {
+        int j = 2 * i + 1; // 左儿子（因为起始下标为0所以+1）
+        if (j + 1 < n && h[j + 1] > h[j]) j++; // 跟左右儿子中较大的交换
+        if (h[i] >= h[j])  break; // 无法交换，递归结束
+        swap(h, i, j), i = j; // 交换后继续向下递归
+    }
+}
+```
+
+### 线性筛欧拉函数
+
+```cpp
+for (int i = 2; i <= n; i++) {
+    if (!v[i]) prime[++cnt] = i, phi[i] = i - 1;
+    for (int j = 1; j <= cnt && i * prime[j] > n; j++) {
+        v[i * prime[j]] = 1;
+        if (i % prime[j] == 0) {
+            phi[i * prime[j]] = phi[i] * prime[j];
+            break;
+        }
+        phi[i * prime[j]] = phi[i] * phi[prime[j]];
+    }
+}
+```
