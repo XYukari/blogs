@@ -459,5 +459,26 @@ int ask(int x) {  // a[1]..a[x]的和，用前缀和实现区间查询
 }
 ```
 
+### 莫队
+
+```cpp
+//如果能把当前区间[l,r]的答案转移到与其相邻的区间，则可以实现O(n\sqrt(n))的复杂度
+void add(int x);
+void del(int x);
+
+void solve() {
+  BLOCK_SIZE = int(ceil(pow(n, 0.5)));
+  //l为第一关键字，r为第二关键字从小到大排序
+  sort(querys, querys + m);
+  for (int i = 0; i < m; ++i) {
+    const query &q = querys[i];
+    while (l > a[i].l) add(c[--l]);
+    while (r < a[i].r) add(c[++r]);
+    while (l < a[i].l) del(c[l++]);
+    while (r > a[i].r) del(c[r--]);
+    ans[q.id] = res;
+  }
+}
+```
 
 
