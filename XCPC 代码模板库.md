@@ -481,4 +481,61 @@ void solve() {
 }
 ```
 
+### 树链剖分
+
+```cpp
+void dfs1(int u) {
+    dep[u] = dep[fa[u]] + 1;
+    siz[u] = 1;
+    int mxson = -1;
+    for (int i = h[u]; i; i = e[i].nxt) {
+        int v = e[i].v;
+        if (v == fa[u]) continue;
+        fa[v] = u;
+        dfs1(v);
+        siz[u] += siz[v]; //子树大小
+        if (!son[u] || siz[v] > mxson) {
+            son[u] = v; //重儿子
+            mxson = siz[v];
+        }
+    }
+}
+void dfs2(int u, int topf) {
+    b[id[u] = ++dfn] = a[u];
+    top[u] = topf; //链顶
+    if (!son[u]) return;
+    dfs2(son[u], topf);
+    for (int i = h[u]; i; i = e[i].nxt) {
+        int v = e[i].v;
+        if (v != fa[u] && v != son[u]) dfs2(v, v);
+    }
+}
+//树上路径+v
+void tadd(int x, int y, int v) {
+    while (top[x] != top[y]) {
+        if (dep[top[x]] < dep[top[y]]) swap(x, y);
+        add(1, id[top[x]], id[x], v);
+        x = fa[top[x]];
+    }
+    if (dep[x] < dep[y]) swap(x, y);
+    add(1, id[y], id[x], v);
+}
+//树上路径求和
+int tquery(int x, int y) {
+    int ans = 0;
+    while (top[x] != top[y]) {
+        if (dep[top[x]] < dep[top[y]]) swap(x, y);
+        ans += query(1, id[top[x]], id[x]);
+        x = fa[top[x]];
+    }
+    if (dep[x] < dep[y]) swap(x, y);
+    ans += query(1, id[y], id[x]);
+    return ans;
+}
+//子树内+v
+add(1, id[x], id[x] + siz[x] - 1, k);
+//子树内求和
+query(1, id[x], id[x] + siz[x] - 1)；
+```
+
 
